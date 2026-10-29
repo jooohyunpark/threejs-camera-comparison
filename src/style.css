@@ -1,17 +1,155 @@
+:root {
+  color-scheme: dark;
+  --bg: #111;
+  --fg: #eee;
+  --muted: #9a9a9a;
+  --accent: #4ea1ff;
+  --border: rgba(255, 255, 255, 0.12);
+  --panel: rgba(18, 18, 18, 0.88);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
-#app {
-  width: 100dvw;
-  height: 100dvh;
-  display: grid;
-  place-content: center;
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--fg);
 }
 
-a {
-  color: inherit;
-  margin: 0 10px;
+#canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Transparent panels on top of the canvas: they define each viewport and
+   receive the pointer input for that view's OrbitControls. */
+main {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.view {
+  position: relative;
+}
+
+.view + .view {
+  border-left: 1px solid var(--border);
+}
+
+@media (max-aspect-ratio: 1/1) {
+  main {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .view + .view {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.view-label {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: none;
+  user-select: none;
+}
+
+.panel {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: min(320px, calc(100% - 24px));
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+  backdrop-filter: blur(8px);
+}
+
+.panel summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.panel[open] summary {
+  margin-bottom: 10px;
+}
+
+.panel p + p,
+.panel .fov + p {
+  margin-top: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.toggle button {
+  padding: 6px 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.toggle button[aria-checked="true"] {
+  background: var(--accent);
+  color: #fff;
+}
+
+.toggle button:focus-visible,
+.fov input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.fov {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.fov span {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fov input {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+[hidden] {
+  display: none !important;
 }

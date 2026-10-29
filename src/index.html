@@ -3,16 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Three.js camera comparison</title>
+    <meta
+      name="description"
+      content="Interactive comparison of the three.js PerspectiveCamera and OrthographicCamera."
+    />
+    <title>Perspective vs Orthographic Camera</title>
   </head>
   <body>
-    <div id="app">
-      <div>
-        <a href="./perspective/">Perspective</a>
-        /
-        <a href="./orthographic/">Orthographic</a>
+    <canvas id="canvas"></canvas>
+
+    <main>
+      <section id="camera-view" class="view">
+        <span class="view-label">Camera view</span>
+      </section>
+      <section id="observer-view" class="view">
+        <span class="view-label">Observer view · camera frustum</span>
+      </section>
+    </main>
+
+    <details class="panel" open>
+      <summary>Perspective vs Orthographic</summary>
+
+      <div class="toggle" role="radiogroup" aria-label="Camera type">
+        <button type="button" role="radio" data-mode="perspective">
+          Perspective
+        </button>
+        <button type="button" role="radio" data-mode="orthographic">
+          Orthographic
+        </button>
       </div>
-    </div>
-    <script type="module" src="/index.js"></script>
+
+      <label class="fov" data-show="perspective">
+        <span>Field of view <output id="fov-value"></output></span>
+        <input id="fov" type="range" min="5" max="100" step="1" value="50" />
+      </label>
+
+      <p data-show="perspective">
+        Mimics the human eye. The frustum is a <strong>pyramid</strong>, so
+        objects shrink with distance and parallel lines converge toward a
+        vanishing point. Scrolling moves the camera closer.
+      </p>
+      <p data-show="perspective" class="hint">
+        Lower the field of view: the camera backs away to keep the same
+        framing, and the image flattens toward orthographic.
+      </p>
+
+      <p data-show="orthographic">
+        Projects along parallel lines. The frustum is a <strong>box</strong>,
+        so on-screen size doesn't depend on distance and parallel lines stay
+        parallel. Scrolling changes the box size (zoom), not the camera
+        position.
+      </p>
+      <p data-show="orthographic" class="hint">
+        Common in CAD, isometric and 2D games, UI overlays and directional
+        light shadow maps.
+      </p>
+
+      <p class="hint">Drag to orbit, right-drag to pan, scroll to zoom.</p>
+    </details>
+
+    <script type="module" src="./main.js"></script>
   </body>
 </html>
